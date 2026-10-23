@@ -12,11 +12,11 @@ function tokenIsValid(token: string | null): boolean {
   }
 }
 
-export default function RequireAuth({ children }: { children: React.ReactElement }) {
+export default function RequireAuth({ children }: { children?: React.ReactNode }) {
   if (!tokenIsValid(localStorage.getItem("token"))) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     return <Navigate to="/" replace />;
   }
-  return children;
+  return <>{children}</>;
 }

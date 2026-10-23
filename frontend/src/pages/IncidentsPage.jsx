@@ -1,14 +1,7 @@
 // src/pages/IncidentsPage.jsx
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { API_URL } from "../config";
-
-const statusColors = {
-  Open: "text-red-400 font-semibold",
-  "In Progress": "text-yellow-300 font-semibold",
-  Investigating: "text-yellow-300 font-semibold",
-  Resolved: "text-green-400 font-semibold",
-};
 
 export default function Incidents() {
   const [incidents, setIncidents] = useState([]);
@@ -18,13 +11,6 @@ export default function Incidents() {
     search: "",
     severity: "",
   });
-
-  // Extract rule names for filter
-  const rulesList = useMemo(
-    () =>
-      Array.from(new Set(incidents.map((i) => i.rule?.name).filter(Boolean))),
-    [incidents]
-  );
 
   useEffect(() => {
     const fetchIncidents = async () => {

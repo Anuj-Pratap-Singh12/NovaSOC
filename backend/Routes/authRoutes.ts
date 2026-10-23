@@ -1,7 +1,7 @@
 // backend/routes/authRoutes.ts
 import express from "express";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import Analyst from "../models/Analyst";
 
 type Request = express.Request;
@@ -18,7 +18,7 @@ const generateToken = (user: any): string => {
   return jwt.sign(
     { id: user._id, role: user.role || "analyst" },
     process.env.JWT_SECRET as string,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "1h" }
+    { expiresIn: (process.env.JWT_EXPIRES_IN || "1h") as SignOptions["expiresIn"] }
   );
 };
 
