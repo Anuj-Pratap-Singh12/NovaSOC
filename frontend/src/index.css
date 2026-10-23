@@ -5,3 +5,9 @@
 * {
   box-sizing: border-box;
 }
+
+/* Dark page background everywhere (no white strip under the fixed sidebar) */
+html,
+body {
+  background-color: #020617;
+}

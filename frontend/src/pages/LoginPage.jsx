@@ -92,8 +92,8 @@ export default function LoginPage() {
             <label className="absolute left-12 top-1/2 -translate-y-1/2 text-sm text-[#7FE9FF] 
                               pointer-events-none transition-all peer-focus:top-[-6px] 
                               peer-focus:left-3 peer-focus:text-xs peer-focus:bg-[#0A0F1F]
-                              peer-not-placeholder-shown:top-[-6px] peer-not-placeholder-shown:left-3 
-                              peer-not-placeholder-shown:text-xs">
+                              peer-[:not(:placeholder-shown)]:top-[-6px] peer-[:not(:placeholder-shown)]:left-3 
+                              peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:bg-[#0A0F1F]">
               Email
             </label>
             {!emailValid && email.length > 0 && (
@@ -117,8 +117,8 @@ export default function LoginPage() {
             <label className="absolute left-12 top-1/2 -translate-y-1/2 text-sm text-[#7FE9FF]
                               pointer-events-none transition-all peer-focus:top-[-6px]
                               peer-focus:left-3 peer-focus:text-xs peer-focus:bg-[#0A0F1F]
-                              peer-not-placeholder-shown:top-[-6px] peer-not-placeholder-shown:left-3
-                              peer-not-placeholder-shown:text-xs">
+                              peer-[:not(:placeholder-shown)]:top-[-6px] peer-[:not(:placeholder-shown)]:left-3
+                              peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:bg-[#0A0F1F]">
               Password
             </label>
           </div>

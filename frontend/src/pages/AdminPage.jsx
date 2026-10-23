@@ -215,7 +215,7 @@ const AdminPage = () => {
               <tr>
                 <th className="py-2 px-3 text-left">Name</th>
                 <th className="py-2 px-3 text-left">Email</th>
-                <th className="py-2 px-3 text-left">Password</th>
+                <th className="py-2 px-3 text-left">Role</th>
                 <th className="py-2 px-3 text-left">Location</th>
                 <th className="py-2 px-3 text-left">Created</th>
                 <th className="py-2 px-3 text-right">Actions</th>
@@ -237,9 +237,7 @@ const AdminPage = () => {
                   >
                     <td className="py-2 px-3">{a.name}</td>
                     <td className="py-2 px-3">{a.email}</td>
-                    <td className="py-2 px-3">
-                      {a.password?.slice(0, 10)}...
-                    </td>
+                    <td className="py-2 px-3 capitalize">{a.role || "analyst"}</td>
                     <td className="py-2 px-3">{a.location}</td>
                     <td className="py-2 px-3">
                       {a.createdAt
@@ -262,9 +260,6 @@ const AdminPage = () => {
           </table>
         </div>
 
-        <p className="mt-3 text-xs text-slate-500">
-          *Passwords are hashed and truncated here. In production never show them at all.
-        </p>
       </div>
     </div>
   );
