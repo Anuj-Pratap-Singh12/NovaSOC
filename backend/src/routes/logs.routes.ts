@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Log from "../models/Log.ts";
+import Log from "../models/Log";
 
 const router = Router();
 

@@ -2,7 +2,8 @@ import axios from "axios";
 import vpnCidrs from "../data/vpn_list.json";
 import { randomIpFromCidr } from "../utils/randomVpnIp";
 
-const BACKEND_INGEST_URL = "http://localhost:4000/api/ingest";
+const ingestUrl = () =>
+  `http://localhost:${process.env.PORT || 4000}/api/ingest`;
 
 // --------------------------------------------------
 //  Attack Templates
@@ -108,7 +109,8 @@ export async function generateRandomLog() {
     threat_score: attack.score,
 
     failed_logins: Math.floor(Math.random() * 10),
-    bytes_sent: Math.floor(Math.random() * 500_000_000),
+    // up to 600 MB so the 500 MB exfiltration rule can actually fire
+    bytes_sent: Math.floor(Math.random() * 600_000_000),
 
     scan_ports: Math.floor(Math.random() * 40),
     connections_per_min: Math.floor(Math.random() * 500),
@@ -121,7 +123,7 @@ export async function generateRandomLog() {
     attack_type: normalizedAttackType,
   };
 
-  console.log("🔥 AUTO-LOG GENERATED:", log);
+  console.log("🔥 AUTO-LOG GENERATED:", log.event_type, log.src_ip);
 
-  await axios.post(BACKEND_INGEST_URL, log);
+  await axios.post(ingestUrl(), log);
 }

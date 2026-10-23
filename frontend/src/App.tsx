@@ -5,7 +5,8 @@ import Dashboard from "./pages/dashboard";
 import Incidents from "./pages/IncidentsPage";
 import ThreatMapPage from "./pages/ThreatMapPage";
 import AdminPage from "./pages/AdminPage";
-import MainLayout from "./layouts/MainLayout"; // 👈 NEW
+import MainLayout from "./layouts/MainLayout";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
@@ -14,8 +15,14 @@ function App() {
         {/* Login WITHOUT sidebar */}
         <Route path="/" element={<LoginPage />} />
 
-        {/* All routes WITH sidebar */}
-        <Route element={<MainLayout />}>
+        {/* All routes WITH sidebar — require a valid login */}
+        <Route
+          element={
+            <RequireAuth>
+              <MainLayout />
+            </RequireAuth>
+          }
+        >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/logs" element={<LogsPage />} />
           <Route path="/incidents" element={<Incidents />} />

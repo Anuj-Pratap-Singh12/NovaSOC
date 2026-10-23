@@ -5,6 +5,7 @@ import SeverityBadge from "./SeverityBadge";
 import IncidentFilters from "./IncidentFilters";
 import IncidentModal from "./IncidentModal";
 import socket from "../lib/socket";
+import { API_URL } from "../config";
 
 export default function IncidentTable() {
   const [incidents, setIncidents] = useState<any[]>([]);
@@ -24,7 +25,7 @@ export default function IncidentTable() {
   // Load incidents on startup
   useEffect(() => {
     async function load() {
-      const res = await fetch("http://localhost:4000/api/incidents");
+      const res = await fetch(`${API_URL}/api/incidents`);
       const data = await res.json();
       setIncidents(data.incidents || []);
     }
@@ -82,7 +83,7 @@ export default function IncidentTable() {
 
   // Change incident status
   async function updateStatus(id: string, newStatus: string) {
-    const res = await fetch(`http://localhost:4000/api/incidents/${id}`, {
+    const res = await fetch(`${API_URL}/api/incidents/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
@@ -101,7 +102,7 @@ export default function IncidentTable() {
     if (!selected) return;
 
     const res = await fetch(
-      `http://localhost:4000/api/incidents/${selected._id}`,
+      `${API_URL}/api/incidents/${selected._id}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -123,7 +124,7 @@ export default function IncidentTable() {
 
     // Unblock
     const res = await fetch(
-      `http://localhost:4000/api/blocklist/unblock/${ip}`,
+      `${API_URL}/api/blocklist/unblock/${ip}`,
       { method: "POST" }
     );
     const data = await res.json();

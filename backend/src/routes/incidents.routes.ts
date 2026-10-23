@@ -1,9 +1,9 @@
 // backend/src/routes/incidents.routes.ts
 
 import { Router } from "express";
-import Incident from "../models/Incident.ts";
-import BlockedIP from "../models/BlockedIP.ts";
-import { getIo } from "../sockets/socket.ts";
+import Incident from "../models/Incident";
+import BlockedIP from "../models/BlockedIP";
+import { getIo } from "../sockets/socket";
 
 const router = Router();
 
@@ -52,11 +52,14 @@ router.patch("/:id", async (req, res) => {
       return res.status(400).json({ error: "Invalid status" });
     }
 
-    const updated = await Incident.findByIdAndUpdate(
-      req.params.id,
-      { status, analyst },
-      { new: true }
-    ).populate("log");
+    // Only update the fields that were actually sent
+    const update: Record<string, string> = {};
+    if (status !== undefined) update.status = status;
+    if (analyst !== undefined) update.analyst = analyst;
+
+    const updated = await Incident.findByIdAndUpdate(req.params.id, update, {
+      new: true,
+    }).populate("log");
 
     if (!updated) return res.status(404).json({ error: "Not found" });
 

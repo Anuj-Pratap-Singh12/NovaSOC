@@ -6,6 +6,7 @@ const vpnCidrs: string[] = vpnCidrsRaw as any;
 
 // Cache for fast repeated lookups
 const vpnCache = new Map<string, boolean>();
+const MAX_CACHE = 50_000;
 
 /**
  * Returns TRUE if an IP belongs to any VPN CIDR
@@ -19,7 +20,10 @@ export function isVPNCached(ip: string): boolean {
   // 2️⃣ Scan CIDR ranges
   const isVpn = vpnCidrs.some(cidr => ipInCidr(ip, cidr));
 
-  // 3️⃣ Cache for O(1) future lookups
+  // 3️⃣ Cache for O(1) future lookups (bounded so memory can't grow forever)
+  if (vpnCache.size >= MAX_CACHE) {
+    vpnCache.delete(vpnCache.keys().next().value); // evict oldest entry
+  }
   vpnCache.set(ip, isVpn);
   return isVpn;
 }

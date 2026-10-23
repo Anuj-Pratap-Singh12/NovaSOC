@@ -57,7 +57,7 @@ export const rules = [
   name: "VPN Detected (CIDR Match)",
   field: "vpn_score",
   op: ">",
-  value: 99,
+  value: 79, // listed VPN ranges score 80–99 (was 99, which could never match)
   severity: "Medium",
   attack: "VPN Activity"
 },

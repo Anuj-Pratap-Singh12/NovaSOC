@@ -2,7 +2,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import Analyst from "../models/Analyst.ts";
+import Analyst from "../models/Analyst";
 
 type Request = express.Request;
 type Response = express.Response;

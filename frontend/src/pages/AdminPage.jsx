@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { API_URL } from "../config";
 
-const API_URL = "http://localhost:4000/api/analysts";
+const ANALYSTS_URL = `${API_URL}/api/analysts`;
 
 const AdminPage = () => {
   const [analysts, setAnalysts] = useState([]);
@@ -23,7 +24,7 @@ const AdminPage = () => {
         return;
       }
 
-      const res = await fetch(API_URL, {
+      const res = await fetch(ANALYSTS_URL, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,7 +69,7 @@ const AdminPage = () => {
         return;
       }
 
-      const res = await fetch(API_URL, {
+      const res = await fetch(ANALYSTS_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +106,7 @@ const AdminPage = () => {
         return;
       }
 
-      const res = await fetch(`${API_URL}/${id}`, {
+      const res = await fetch(`${ANALYSTS_URL}/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

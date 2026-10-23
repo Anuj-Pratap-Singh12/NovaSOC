@@ -14,6 +14,8 @@ const Sidebar = () => {
   const confirmLogout = () => {
     const ok = window.confirm("Are you sure you want to logout?");
     if (ok) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       window.location.href = "/";
     }
   };

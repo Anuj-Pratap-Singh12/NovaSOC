@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import TableCard from "./TableCard";
+import { API_URL } from "../config";
 
 export default function LogTable() {
   const [logs, setLogs] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/logs")
+    fetch(`${API_URL}/api/logs`)
       .then((r) => r.json())
       .then((d) => setLogs(d.logs || []))
       .catch((err) => console.error("Failed to load logs", err));

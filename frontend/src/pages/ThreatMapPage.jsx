@@ -1,5 +1,4 @@
 import React from "react";
-import Sidebar from "../components/Sidebar";
 import {
   MapContainer,
   TileLayer,
@@ -61,8 +60,6 @@ const FlashIcon = (color) =>
 export default function ThreatMapPage() {
   return (
     <div className="flex bg-[#000814] min-h-screen text-cyan-100">
-      <Sidebar />
-
       {/* 🔥 Animated marker styles */}
       <style>{`
         .pulse-marker {
@@ -94,11 +91,13 @@ export default function ThreatMapPage() {
           100% { box-shadow: 0 0 16px currentColor; opacity: 1; }
         }
         .leaflet-control-attribution {
-          display: none !important;
+          background: rgba(0, 8, 20, 0.7) !important;
+          color: #7dd3fc !important;
         }
+        .leaflet-control-attribution a { color: #7dd3fc !important; }
       `}</style>
 
-      <div className="flex-1 ml-56 p-6">
+      <div className="flex-1 p-6">
         <h1 className="text-3xl font-bold text-cyan-400 mb-5">
           🌍 Global Threat Map
         </h1>
@@ -113,7 +112,10 @@ export default function ThreatMapPage() {
               className="w-full h-[500px]"
             >
               {/* ⭐ Dark Theme Tiles */}
-              <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" />
+              <TileLayer
+                url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
 
               {attacks.map((a) => {
                 const color = severityColor[a.severity];

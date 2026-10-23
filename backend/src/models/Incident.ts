@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const IncidentSchema = new Schema(
   {
@@ -43,4 +43,5 @@ const IncidentSchema = new Schema(
 );
 
 // Prevent model overwrite during hot reload
-export default model("Incident", IncidentSchema) || model("Incident");
+export default mongoose.models.Incident ||
+  mongoose.model("Incident", IncidentSchema);

@@ -1,6 +1,7 @@
 // src/pages/IncidentsPage.jsx
 
 import { useState, useEffect, useMemo } from "react";
+import { API_URL } from "../config";
 
 const statusColors = {
   Open: "text-red-400 font-semibold",
@@ -30,7 +31,7 @@ export default function Incidents() {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:4000/api/incidents", {
+        const response = await fetch(`${API_URL}/api/incidents`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,7 +69,7 @@ export default function Incidents() {
   // Update incident status
   async function updateStatus(id, newStatus) {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:4000/api/incidents/${id}`, {
+    const res = await fetch(`${API_URL}/api/incidents/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

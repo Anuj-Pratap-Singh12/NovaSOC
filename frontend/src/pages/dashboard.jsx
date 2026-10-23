@@ -7,9 +7,10 @@ import RadarThreatChart from "../components/RadarThreatChart";
 import AttackMultiTrend from "../components/AttackMultiTrend";
 import LiveFeed from "../components/LiveFeed";
 import TopIPs from "../components/TopIPs";
+import { API_URL } from "../config";
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState({ active: 0, open: 0, blocked: 0 });
+  const [stats, setStats] = useState({ active: 0, open: 0, blocked: 0, resolved: 0 });
   const [lineData, setLineData] = useState([]);
   const [severityData, setSeverityData] = useState([]);
   const [radarData, setRadarData] = useState([]);
@@ -25,31 +26,32 @@ export default function DashboardPage() {
           Authorization: `Bearer ${token}`,
         };
 
-        const [summary, trend, sev, radar, top] = await Promise.all([
-          fetch("http://localhost:4000/api/analytics/summary", {
+        const [summary, series, trend, sev, radar, top] = await Promise.all([
+          fetch(`${API_URL}/api/analytics/summary`, {
             headers,
           }).then((r) => r.json()),
-          // 🔥 single call for both line + multi-trend
-          fetch("http://localhost:4000/api/analytics/trend-multi", {
+          fetch(`${API_URL}/api/analytics/time-series`, {
             headers,
           }).then((r) => r.json()),
-          fetch("http://localhost:4000/api/analytics/severity", {
+          fetch(`${API_URL}/api/analytics/trend-multi`, {
             headers,
           }).then((r) => r.json()),
-          fetch("http://localhost:4000/api/analytics/categories", {
+          fetch(`${API_URL}/api/analytics/severity`, {
             headers,
           }).then((r) => r.json()),
-          fetch("http://localhost:4000/api/analytics/top-ips", {
+          fetch(`${API_URL}/api/analytics/categories`, {
+            headers,
+          }).then((r) => r.json()),
+          fetch(`${API_URL}/api/analytics/top-ips`, {
             headers,
           }).then((r) => r.json()),
         ]);
 
-        setStats(summary.stats || { active: 0, open: 0, blocked: 0 });
+        setStats(summary.stats || { active: 0, open: 0, blocked: 0, resolved: 0 });
 
-        // Right now both use same data; adjust if backend later splits them
-        const trendData = trend.data || [];
-        setLineData(trendData);
-        setMultiTrend(trendData);
+        // Line chart: total logs per minute. Multi-trend: per attack type.
+        setLineData(series.data || []);
+        setMultiTrend(trend.data || []);
 
         setSeverityData(sev.data || []);
         setRadarData(radar.data || []);

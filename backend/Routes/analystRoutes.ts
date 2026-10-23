@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import Analyst from "../models/Analyst.ts";
-import { protect, adminOnly } from "../middleware/authmiddleware.ts";
+import Analyst from "../models/Analyst";
+import { protect, adminOnly } from "../middleware/authmiddleware";
 
 type Request = express.Request;
 type Response = express.Response;
@@ -19,7 +19,9 @@ interface CreateAnalystRequest {
 // GET /api/analysts  (protected, all authenticated users can view)
 router.get("/", protect, async (req: Request, res: Response): Promise<void> => {
   try {
-    const analysts = await Analyst.find().sort({ createdAt: -1 });
+    const analysts = await Analyst.find()
+      .select("-password") // never send password hashes to the client
+      .sort({ createdAt: -1 });
     res.json(analysts);
   } catch (err) {
     const errMsg = err instanceof Error ? err.message : "Server error";
@@ -61,7 +63,8 @@ router.post(
         role: role || "analyst",
       });
 
-      res.status(201).json(analyst);
+      const { password: _omit, ...safe } = analyst.toObject();
+      res.status(201).json(safe);
     } catch (err: any) {
       console.error("POST /api/analysts error:", err);
       if (err.code === 11000) {

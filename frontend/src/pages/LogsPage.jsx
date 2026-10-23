@@ -1,6 +1,7 @@
 // src/pages/LogsPage.jsx
 
 import { useState, useEffect } from "react";
+import { API_URL } from "../config";
 
 const severityColor = {
   High: "bg-red-500/20 text-red-400 border-red-500/40",
@@ -18,7 +19,7 @@ export default function LogsPage() {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:4000/api/logs", {
+        const response = await fetch(`${API_URL}/api/logs`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

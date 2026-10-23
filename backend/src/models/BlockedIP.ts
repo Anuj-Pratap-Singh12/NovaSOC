@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const BlockedIPSchema = new mongoose.Schema(
   {
-    ip: { type: String, required: true },
+    ip: { type: String, required: true, unique: true },
     reason: { type: String, required: true },
     threat_score: { type: Number, default: 0 },
     incident_id: { type: mongoose.Schema.Types.ObjectId, ref: "Incident" },

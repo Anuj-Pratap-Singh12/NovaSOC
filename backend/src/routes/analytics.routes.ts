@@ -1,7 +1,7 @@
 import { Router } from "express";
-import Log from "../models/Log.ts";
-import Incident from "../models/Incident.ts";
-import BlockedIP from "../models/BlockedIP.ts";
+import Log from "../models/Log";
+import Incident from "../models/Incident";
+import BlockedIP from "../models/BlockedIP";
 
 const router = Router();
 
@@ -58,14 +58,24 @@ router.get("/trend-multi", async (req, res) => {
 
 
 
-/* 2️⃣ TIME SERIES */
+/* 2️⃣ TIME SERIES — total logs per minute (last 20 minutes that had activity) */
 router.get("/time-series", async (req, res) => {
   try {
-    const logs = await Log.find().sort({ createdAt: 1 }).limit(20);
+    const rows = await Log.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%dT%H:%M:00Z", date: { $ifNull: ["$timestamp", "$createdAt"] } } },
+          value: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: -1 } },
+      { $limit: 20 },
+      { $sort: { _id: 1 } },
+    ]);
 
-    const data = logs.map((l) => ({
-      time: new Date(l.createdAt || l.timestamp).toLocaleTimeString(),
-      value: Math.floor(Math.random() * 10) + 1
+    const data = rows.map((r) => ({
+      time: new Date(r._id).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      value: r.value,
     }));
 
     res.json({ data });
@@ -149,40 +159,6 @@ router.get("/high-risk", async (req, res) => {
     });
   } catch (e) {
     res.status(500).json({ error: "High-risk error" });
-  }
-});
-
-/* 7️⃣ MULTI-TREND (required by frontend) */
-router.get("/trend-multi", async (req, res) => {
-  try {
-    const result = await Log.aggregate([
-      {
-        $group: {
-          _id: {
-            date: { $dateToString: { format: "%H:%M", date: "$timestamp" } },
-            attack_type: "$attack_type"
-          },
-          count: { $sum: 1 }
-        }
-      },
-      {
-        $group: {
-          _id: "$_id.date",
-          items: { $push: { type: "$_id.attack_type", count: "$count" } }
-        }
-      },
-      { $sort: { _id: 1 } }
-    ]);
-
-    const formatted = result.map(r => {
-      const obj: any = { time: r._id };
-      r.items.forEach(i => obj[i.type] = i.count);
-      return obj;
-    });
-
-    res.json({ data: formatted });
-  } catch (error) {
-    res.status(500).json({ error: "Trend multi error" });
   }
 });
 

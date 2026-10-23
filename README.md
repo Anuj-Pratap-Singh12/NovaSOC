@@ -256,18 +256,32 @@ A full-stack SOC dashboard for real-time threat detection, DDoS analytics, VPN m
 
 # ⚙️ Setup Instructions
 
+Requirements: Node.js 18+ and MongoDB (local `mongod` or an Atlas connection string).
+
 ## 1️⃣ Backend
+```bash
 cd backend
+cp .env.example .env        # set MONGO_URI and JWT_SECRET
 npm install
-npm run dev
+npm run seed:admin          # creates admin@soc.local / Admin@123 and analyst1@soc.local / Analyst@123
+npm run dev                 # API + Socket.IO on http://localhost:4000
+```
+The built-in attack generator posts a synthetic log every `AUTO_LOG_INTERVAL` ms
+(set it to `15000` for a lively demo, `0` to disable).
 
 ## 2️⃣ Frontend
+```bash
 cd frontend
 npm install
-npm run dev
+npm start                   # http://localhost:3000
+```
+To point the UI at another backend, start it with `REACT_APP_API_URL=http://host:4000`.
 
-## 3️⃣ Log Generator (Simulate Attacks)
-node generator.js
+## 3️⃣ Send a log manually
+```bash
+curl -X POST http://localhost:4000/api/ingest -H "Content-Type: application/json" \
+  -d '{"src_ip":"45.33.32.156","event_type":"bruteforce","payload":"Failed login attempt","severity":"High","threat_score":95,"failed_logins":7,"attack_type":"Bruteforce"}'
+```
 
 ---
 

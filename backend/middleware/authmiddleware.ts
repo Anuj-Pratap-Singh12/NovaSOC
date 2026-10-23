@@ -1,7 +1,7 @@
 // middleware/authMiddleware.ts
 import jwt from "jsonwebtoken";
 import express from "express";
-import Analyst from "../models/Analyst.ts";
+import Analyst from "../models/Analyst";
 
 type Request = express.Request;
 type Response = express.Response;
